@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true; // Keep the message channel open for async responses
 });
 
-// Optional: Add a floating button on YouTube pages
+// Optional: Add a floating button on YouTube pages for quick access
 function createFloatingButton() {
     // Check if button already exists
     if (document.getElementById('yt-summarizer-btn')) {
@@ -55,22 +55,39 @@ function createFloatingButton() {
         button.style.transform = 'scale(1)';
     });
     
-    // Click handler
-    button.addEventListener('click', () => {
-        // Send message to background script to start summarization
-        chrome.runtime.sendMessage({
-            action: 'summarizeFromFloatingButton',
-            url: window.location.href
-        });
-        
-        // Visual feedback
-        button.textContent = '✓ Opening Gemini...';
-        button.style.background = '#34a853';
-        
-        setTimeout(() => {
-            button.innerHTML = '🤖 Summarize';
-            button.style.background = '#4285f4';
-        }, 2000);
+    // Click handler - directly trigger summarization
+    button.addEventListener('click', async () => {
+        try {
+            // Get the prompt template from storage
+            const result = await chrome.storage.sync.get(['promptTemplate']);
+            const promptTemplate = result.promptTemplate || PROMPT_TEMPLATE;
+            const prompt = promptTemplate.replace('{URL}', window.location.href);
+            
+            // Visual feedback
+            button.textContent = '✓ Opening Gemini...';
+            button.style.background = '#34a853';
+            
+            // Send message to background script to start summarization
+            chrome.runtime.sendMessage({
+                action: 'summarizeVideo',
+                prompt: prompt
+            });
+            
+            setTimeout(() => {
+                button.innerHTML = '🤖 Summarize';
+                button.style.background = '#4285f4';
+            }, 2000);
+            
+        } catch (error) {
+            console.error('Error in floating button click:', error);
+            button.textContent = '❌ Error';
+            button.style.background = '#ea4335';
+            
+            setTimeout(() => {
+                button.innerHTML = '🤖 Summarize';
+                button.style.background = '#4285f4';
+            }, 2000);
+        }
     });
     
     document.body.appendChild(button);
@@ -108,23 +125,6 @@ const observer = new MutationObserver(() => {
 });
 
 observer.observe(document.body, { childList: true, subtree: true });
-
-// Handle the floating button click message in background script
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === 'summarizeFromFloatingButton') {
-        // Get the prompt template and create the full prompt
-        chrome.storage.sync.get(['promptTemplate'], (result) => {
-            const promptTemplate = result.promptTemplate || PROMPT_TEMPLATE;
-            const prompt = promptTemplate.replace('{URL}', request.url);
-            
-            // Send to background script for processing
-            chrome.runtime.sendMessage({
-                action: 'summarizeVideo',
-                prompt: prompt
-            });
-        });
-    }
-});
 
 // Prompt template
 let PROMPT_TEMPLATE = `

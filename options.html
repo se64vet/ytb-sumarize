@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>YouTube Summarizer - Options</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #1976d2;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 30px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #4285f4;
+        }
+        
+        .help-text {
+            font-size: 14px;
+            color: #666;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+        
+        .help-text code {
+            background-color: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            color: #1976d2;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            background-color: #3367d6;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .examples {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .examples h3 {
+            color: #495057;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .example-prompt {
+            background-color: white;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            border-left: 4px solid #4285f4;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .example-prompt:hover {
+            background-color: #f1f3f4;
+        }
+        
+        .example-title {
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 5px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 YouTube Summarizer Options</h1>
+        <p class="subtitle">Customize how your YouTube videos are summarized</p>
+        
+        <div class="form-group">
+            <label for="promptTemplate">Custom Prompt Template</label>
+            <textarea id="promptTemplate" placeholder="Enter your custom prompt template..."></textarea>
+            <div class="help-text">
+                Use <code>{URL}</code> as a placeholder where you want the YouTube video URL to be inserted.
+                The extension will replace this with the actual video URL when summarizing.
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <button id="saveSettings" class="btn">Save Settings</button>
+            <button id="resetToDefault" class="btn btn-secondary">Reset to Default</button>
+        </div>
+        
+        <div id="status" class="status"></div>
+        
+        <div class="examples">
+            <h3>📝 Example Prompts</h3>
+            <div class="example-prompt" onclick="useExample(this)">
+                <div class="example-title">Detailed Summary</div>
+                Please provide a comprehensive summary of this YouTube video, including main points, key insights, and important takeaways: {URL}
+            </div>
+            
+            <div class="example-prompt" onclick="useExample(this)">
+                <div class="example-title">Bullet Points</div>
+                Summarize this YouTube video in bullet points, highlighting the most important information: {URL}
+            </div>
+            
+            <div class="example-prompt" onclick="useExample(this)">
+                <div class="example-title">Educational Focus</div>
+                Analyze this educational YouTube video and provide: 1) Main concepts taught, 2) Key learning objectives, 3) Practical applications, 4) Additional resources mentioned: {URL}
+            </div>
+            
+            <div class="example-prompt" onclick="useExample(this)">
+                <div class="example-title">Business/Professional</div>
+                Create a professional summary of this YouTube video suitable for business context, including key insights, actionable advice, and relevant statistics or data mentioned: {URL}
+            </div>
+            
+            <div class="example-prompt" onclick="useExample(this)">
+                <div class="example-title">Quick Overview</div>
+                Give me a quick 3-sentence summary of what this YouTube video is about: {URL}
+            </div>
+        </div>
+    </div>
+    
+    <script src="options.js"></script>
+</body>
+</html>

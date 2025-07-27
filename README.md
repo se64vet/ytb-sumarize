@@ -1,14 +1,15 @@
 # YouTube Video Summarizer Chrome Extension
 
-A Chrome extension that automatically summarizes YouTube videos using Google Gemini AI.
+A Chrome extension that automatically summarizes YouTube videos using Google Gemini AI with one-click functionality.
 
 ## Features
 
-- 🎥 One-click YouTube video summarization
-- 🤖 Automatic integration with Google Gemini
-- ⚙️ Customizable prompt templates
-- 🎯 Floating button on YouTube pages for quick access
-- 💾 Settings persistence across browser sessions
+- 🎯 **One-click summarization** - Click the extension icon to instantly summarize
+- 🤖 **Automatic Gemini integration** - Opens and submits prompt automatically
+- ⚙️ **Customizable prompts** - Dedicated options page for prompt templates
+- 🎮 **Floating button** - Quick access button on YouTube pages
+- 🔔 **Smart notifications** - Status updates and error handling
+- 💾 **Auto-save settings** - Prompts saved automatically
 
 ## Installation
 
@@ -29,8 +30,8 @@ Make sure you have all these files in your extension folder:
 ```
 youtube-summarizer/
 ├── manifest.json
-├── popup.html
-├── popup.js
+├── options.html
+├── options.js
 ├── background.js
 ├── content.js
 └── README.md
@@ -38,49 +39,68 @@ youtube-summarizer/
 
 ## Usage
 
-### Method 1: Extension Popup
+### One-Click Summarization
 
 1. Navigate to any YouTube video
 2. Click the extension icon in your toolbar
-3. Click "Summarize Current Video"
-4. The extension will automatically open Gemini in a new tab and submit the prompt
+3. Gemini will automatically open in a new tab with your summary request
 
-### Method 2: Floating Button
+### Floating Button (Alternative)
 
-1. When on a YouTube video page, you'll see a floating "🤖 Summarize" button
-2. Click the button for instant summarization
-3. Gemini will open automatically with your video URL
+- Look for the "🤖 Summarize" button on YouTube video pages
+- Click for instant summarization
 
-## Customization
+### Customizing Prompts
 
-### Custom Prompt Templates
-
-1. Click the extension icon
-2. Modify the prompt template in the text area
-3. Use `{URL}` as a placeholder for the video URL
-4. Click "Save Settings" or wait for auto-save
-
-### Default Prompt
-
-```
-Please summarize this YouTube video in detail, including the main points, key insights, and important takeaways: {URL}
-```
+1. Right-click the extension icon → "Options"
+2. Or go to `chrome://extensions/` → Find the extension → "Extension options"
+3. Modify the prompt template (use `{URL}` as placeholder)
+4. Settings save automatically
 
 ## How It Works
 
-1. **Detects YouTube videos** - The extension only activates on YouTube watch pages
-2. **Extracts video URL** - Captures the current video URL from the browser
-3. **Formats prompt** - Inserts the URL into your custom prompt template
-4. **Opens Gemini** - Creates a new tab with Google Gemini
-5. **Auto-submits** - Automatically pastes the prompt and submits it
+1. **One-click activation** - Extension icon directly triggers summarization
+2. **URL extraction** - Gets the current YouTube video URL
+3. **Prompt formatting** - Inserts URL into your custom template
+4. **Auto-Gemini** - Opens Gemini and submits the prompt automatically
+5. **Smart notifications** - Shows status updates and handles errors
+
+## Customization Options
+
+### Example Prompt Templates
+
+**Detailed Summary:**
+
+```
+Please provide a comprehensive summary of this YouTube video, including main points, key insights, and important takeaways: {URL}
+```
+
+**Bullet Points:**
+
+```
+Summarize this YouTube video in bullet points, highlighting the most important information: {URL}
+```
+
+**Educational Focus:**
+
+```
+Analyze this educational YouTube video and provide: 1) Main concepts taught, 2) Key learning objectives, 3) Practical applications: {URL}
+```
+
+**Quick Overview:**
+
+```
+Give me a quick 3-sentence summary of what this YouTube video is about: {URL}
+```
 
 ## Permissions Explained
 
-- `activeTab` - Access the current YouTube tab to get the video URL
+- `activeTab` - Access current YouTube tab for URL extraction
 - `tabs` - Create new tabs for Gemini
-- `scripting` - Inject scripts to automate Gemini interaction
-- `https://www.youtube.com/*` - Work on YouTube pages
-- `https://gemini.google.com/*` - Interact with Gemini
+- `scripting` - Automate Gemini interaction
+- `storage` - Save your custom prompt templates
+- `notifications` - Show status messages
+- YouTube & Gemini host permissions for functionality
 
 ## Troubleshooting
 

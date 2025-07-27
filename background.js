@@ -10,6 +10,50 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
+// Handle extension icon click
+chrome.action.onClicked.addListener(async (tab) => {
+    // Check if we're on a YouTube video page
+    if (!tab.url || !tab.url.includes('youtube.com/watch')) {
+        // Show notification if not on YouTube
+        chrome.notifications.create({
+            type: 'basic',
+            iconUrl: 'icon48.png',
+            title: 'YouTube Summarizer',
+            message: 'Please navigate to a YouTube video first.'
+        });
+        return;
+    }
+    
+    try {
+        // Get the saved prompt template
+        const result = await chrome.storage.sync.get(['promptTemplate']);
+        const promptTemplate = result.promptTemplate || "Please provide a comprehensive summary of this YouTube video, including main points, key insights, and important takeaways: {URL}";
+        
+        // Create the prompt with the video URL
+        const prompt = promptTemplate.replace('{URL}', tab.url);
+        
+        // Process the summarization
+        await handleSummarizeVideo(prompt);
+        
+        // Show success notification
+        chrome.notifications.create({
+            type: 'basic',
+            iconUrl: 'icon48.png',
+            title: 'YouTube Summarizer',
+            message: 'Opening Gemini with your video summary...'
+        });
+        
+    } catch (error) {
+        console.error('Error in extension click handler:', error);
+        chrome.notifications.create({
+            type: 'basic',
+            iconUrl: 'icon48.png',
+            title: 'YouTube Summarizer',
+            message: 'Error: ' + error.message
+        });
+    }
+});
+
 async function handleSummarizeVideo(prompt) {
     try {
         // Open Gemini in a new tab

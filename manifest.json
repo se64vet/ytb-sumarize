@@ -7,16 +7,17 @@
         "activeTab",
         "tabs",
         "scripting",
-        "storage"
+        "storage",
+        "notifications"
     ],
     "host_permissions": [
         "https://www.youtube.com/*",
         "https://gemini.google.com/*"
     ],
     "action": {
-        "default_popup": "popup.html",
         "default_title": "Summarize YouTube Video"
     },
+    "options_page": "options.html",
     "content_scripts": [
         {
             "matches": [
@@ -31,8 +32,8 @@
         "service_worker": "background.js"
     },
     "icons": {
-        "16": "icon16.png",
-        "48": "icon48.png",
-        "128": "icon128.png"
+        "16": "icon-16.png",
+        "48": "icon-48.png",
+        "144": "icon-144.png"
     }
 }
